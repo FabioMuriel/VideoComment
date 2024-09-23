@@ -5,81 +5,120 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
+<p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+<p align="center">
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
 <a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
 <a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
 <a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Descripción
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este es un proyecto basado en [Nest](https://github.com/nestjs/nest) que permite a los usuarios realizar comentarios en los vídeos publicados por otros usuarios. 
 
-## Project setup
+### Versiones utilizadas
+- **Node.js**: v20.x
+- **NestJS**: v10.x
+- **TypeScript**: v5.x
+- **MySql**: 
+
+## Configuración del Proyecto
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+## Compilar y ejecutar el proyecto
 
 ```bash
-# development
+# desarrollo
 $ npm run start
 
-# watch mode
+# modo de vigilancia
 $ npm run start:dev
 
-# production mode
+# modo de producción
 $ npm run start:prod
 ```
 
-## Run tests
+## Ejecutar pruebas
 
 ```bash
-# unit tests
+# pruebas unitarias
 $ npm run test
 
-# e2e tests
+# pruebas e2e
 $ npm run test:e2e
 
-# test coverage
+# cobertura de pruebas
 $ npm run test:cov
 ```
 
-## Resources
+## Estructura de la Base de Datos
 
-Check out a few resources that may come in handy when working with NestJS:
+Las entidades involucradas en esta funcionalidad son:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- **Usuario (User)**:
+  - `id`: Identificador único del usuario (PK).
+  - `nombre`: Nombre del usuario.
+  - `email`: Correo electrónico del usuario.
 
-## Support
+- **Vídeo (Video)**:
+  - `id`: Identificador único del vídeo (PK).
+  - `titulo`: Título del vídeo.
+  - `url`: URL del vídeo.
+  - `id_usuario`: Identificador del usuario que publicó el vídeo (FK).
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **Comentario (Comment)**:
+  - `id`: Identificador único del comentario (PK).
+  - `texto`: Texto del comentario.
+  - `id_video`: Identificador del vídeo al que pertenece el comentario (FK).
+  - `id_usuario`: Identificador del usuario que hizo el comentario (FK).
 
-## Stay in touch
+### Diagrama Entidad-Relación
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```mermaid
+erDiagram
+    USER {
+        string id PK
+        string nombre
+        string email
+    }
+    VIDEO {
+        string id PK
+        string titulo
+        string url
+        string id_usuario FK
+    }
+    COMMENT {
+        string id PK
+        string texto
+        string id_video FK
+        string id_usuario FK
+    }
 
-## License
+    USER ||--o{ VIDEO : publishes
+    USER ||--o{ COMMENT : writes
+    VIDEO ||--o{ COMMENT : has
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Documentación de Endpoints
+
+Aquí puedes documentar los endpoints de tu API. Te recomiendo usar [Postman](https://www.postman.com/) o [ApiDog](https://apidog.com/) para crear la documentación.
+
+```
+
+### Notas
+
+1. **Actualiza las versiones**: Asegúrate de actualizar las versiones de Node.js, NestJS y cualquier otra tecnología que estés utilizando en el proyecto.
+
+2. **Información de contacto**: Cambia la información de contacto y enlaces donde sea necesario.
+
+3. **Documentación de Endpoints**: Asegúrate de incluir la documentación de los endpoints en la sección correspondiente, ya sea usando Postman o ApiDog.
+
+4. **Instrucciones de instalación**: Asegúrate de que las instrucciones de instalación y uso sean claras para facilitar la implementación.
+
+Este README debería proporcionar una buena base para tu proyecto y facilitar la comprensión a otros desarrolladores sobre cómo utilizar y contribuir al mismo.
