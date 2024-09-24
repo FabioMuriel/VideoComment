@@ -5,12 +5,20 @@ import { UserService, UserCreateDto, UserUpdateDto } from './index';
 export class UserController {
 	constructor(private readonly userService: UserService) { }
 	
-	@Get()
-	async getUsers() {
-		return this.userService.getUsers();
+	@Get('deleted') // Cambia a 'deleted' sin la barra inicial
+	async getDeletedUsers() {
+		const result = await this.userService.getDeletedUsers();
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data
+		};
 	}
 
-	@Get(':id')
+	@Get(':id') // Esta ruta debe estar después
 	async getUser(@Param('id') id: string) {
 		const result = await this.userService.getUser(id);
 		if (!result.status) {

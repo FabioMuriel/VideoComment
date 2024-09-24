@@ -21,7 +21,7 @@ export class UserService {
 	}
 
 	async getUsers(): Promise<GenericResponse<User[]>> {
-		const users = await this.userRepository.find();
+		const users = await this.userRepository.find({ where: { isDeleted: false } });
 		const message =
 			users.length === 0 ? 'No hay usuarios' : 'Usuarios encontrados';
 
@@ -30,7 +30,19 @@ export class UserService {
 			message,
 			data: users,
 		});
-	}
+    }
+    
+    async getDeletedUsers(): Promise<GenericResponse<User[]>> {
+        const users = await this.userRepository.find({ where: { isDeleted: true } });
+        const message =
+			users.length === 0 ? 'No hay usuarios eliminados' : 'Usuarios eliminados';
+
+		return GenericResponse.create<User[]>({
+			status: true,
+			message,
+			data: users,
+        });
+    }
 
 	async getUser(id: string): Promise<GenericResponse<User>> {
 		const user = await this.findUserById(id);

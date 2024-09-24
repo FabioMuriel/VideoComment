@@ -3,11 +3,24 @@ import { VideoService, VideoCreateDto, VideoUpdateDto } from './index';
 
 @Controller('video')
 export class VideoController {
-	constructor(private readonly videoService: VideoService) {}
+	constructor(private readonly videoService: VideoService) { }
 
 	@Get()
 	async getVideos() {
 		const result = await this.videoService.getVideos();
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data
+		};
+	}
+
+	@Get('deleted')
+	async getDeletedVideos() {
+		const result = await this.videoService.getDeletedVideos();
 		if (!result.status) {
 			throw new BadRequestException(result.message);
 		}

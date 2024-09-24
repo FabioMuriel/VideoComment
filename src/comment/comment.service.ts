@@ -25,7 +25,7 @@ export class CommentService {
         
         const message = comments.length === 0
             ? 'No hay comentarios'
-            : 'Comentarios encontrados correctamente';
+            : 'Comentarios encontrados';
         
 		return GenericResponse.create<Comment[]>({
 			status: true,
@@ -39,7 +39,7 @@ export class CommentService {
 			.getUser(userId)
         
 		const video = await this.videoService
-			.getVideo(videoId)
+			.findVideoById(videoId)
 
 		const newComment: Comment = {
 			id: v4(),
@@ -48,7 +48,7 @@ export class CommentService {
 			updatedAt: null,
 			isDeleted: false,
 			user: user.data,
-			video: video.data,
+			video: video,
         };
         
         const saveComment = await this.commentRepository.save(newComment);
@@ -64,7 +64,7 @@ export class CommentService {
 
 	async getComment(id: string): Promise<GenericResponse<Comment>> {
         const comment = await this.findCommentById(id);        
-        const message = comment ? 'Comentario encontrado correctamente' : 'Comentario no encontrado';
+        const message = comment ? 'Comentario encontrado' : 'Comentario no encontrado';
 
 		return GenericResponse.create<Comment>({
 			status: true,

@@ -14,7 +14,7 @@ export class VideoService {
 		private readonly userService: UserService,
 	) {}
 
-	private async findVideoById(id: string): Promise<Video> {
+	async findVideoById(id: string): Promise<Video> {
 		return await this.videoRepository.findOne({ where: { id: id } });
 	}
 
@@ -22,9 +22,23 @@ export class VideoService {
 		const videos = await this.videoRepository.find();
 
 		const message =
+			videos.length === 0 ? 'No hay videos' : 'Videos encontrados';
+		return GenericResponse.create<Video[]>({
+			status: true,
+			message,
+			data: videos,
+		});
+	}
+
+	async getDeletedVideos(): Promise<GenericResponse<Video[]>> {
+		const videos = await this.videoRepository.find({
+			where: { isDeleted: true },
+			relations: ['user', 'comments'],
+		});
+		const message =
 			videos.length === 0
-				? 'No hay videos'
-				: 'Videos encontrados correctamente';
+				? 'No hay videos eliminados'
+				: 'Videos eliminados encontrados';
 		return GenericResponse.create<Video[]>({
 			status: true,
 			message,
@@ -34,13 +48,11 @@ export class VideoService {
 
 	async getVideo(id: string): Promise<GenericResponse<Video>> {
 		const video = await this.videoRepository.findOne({
-			where: { id: id },
-			relations: ['comments'], 
+			where: { id: id, isDeleted: false },
+			relations: ['comments', 'user'],
 		});
 
-		const message = video
-			? 'Video encontrado correctamente'
-			: 'Video no encontrado';
+		const message = video ? 'Video encontrado' : 'Video no encontrado';
 		return GenericResponse.create<Video>({
 			status: !!video,
 			message,
@@ -106,7 +118,11 @@ export class VideoService {
 		}
 	}
 
-	async updateVideo(id: string, title: string, description: string): Promise<GenericResponse<Video>> {
+	async updateVideo(
+		id: string,
+		title: string,
+		description: string,
+	): Promise<GenericResponse<Video>> {
 		try {
 			const video = await this.findVideoById(id);
 			if (!video) {
@@ -116,7 +132,11 @@ export class VideoService {
 				});
 			}
 
-			await this.videoRepository.update(id, { title, description, updatedAt: new Date() });
+			await this.videoRepository.update(id, {
+				title,
+				description,
+				updatedAt: new Date(),
+			});
 			const updatedVideo = await this.findVideoById(id);
 			return GenericResponse.create<Video>({
 				status: true,
@@ -138,9 +158,7 @@ export class VideoService {
 		});
 
 		const message =
-			userVideos.length === 0
-				? 'No hay videos'
-				: 'Videos encontrados correctamente';
+			userVideos.length === 0 ? 'No hay videos' : 'Videos encontrados';
 		return GenericResponse.create<Video[]>({
 			status: true,
 			message,
