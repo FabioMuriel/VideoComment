@@ -73,9 +73,9 @@ export class CommentService {
 		});
 	}
 
-    async updateComment(id: string, comment: Comment): Promise<GenericResponse<Comment>> {
+    async updateComment(id: string, commentContent: string): Promise<GenericResponse<Comment>> {
         await this.findCommentById(id);
-		await this.commentRepository.update(id, comment);
+		await this.commentRepository.update(id, { content: commentContent });
         const updatedComment = await this.getComment(id);
         const message = updatedComment ? 'Comentario actualizado correctamente' : 'Comentario no encontrado';
 

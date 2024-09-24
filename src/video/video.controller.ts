@@ -1,7 +1,5 @@
 import {Controller, Get, Post, Delete, Put, Body, Param, BadRequestException} from '@nestjs/common';
-import { VideoService } from './video.service';
-import { VideoCreateDto } from '../dtos/videoCreate.dto';
-import { VideoUpdateDto } from '../dtos/videoUpdate.dto';
+import { VideoService, VideoCreateDto, VideoUpdateDto } from './index';
 
 @Controller('video')
 export class VideoController {
@@ -65,7 +63,7 @@ export class VideoController {
 
 	@Put(':id')
 	async updateVideo(@Param('id') id: string, @Body() video: VideoUpdateDto) {
-		const result = await this.videoService.updateVideo(id, video);
+		const result = await this.videoService.updateVideo(id, video.title, video.description);
 		if (!result.status) {
 			throw new BadRequestException(result.message);
 		}

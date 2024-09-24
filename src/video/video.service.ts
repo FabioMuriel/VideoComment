@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Video } from '../Entities/Video.Entities';
 import { UserService } from '../users/users.service';
 import { v4 } from 'uuid';
 import { GenericResponse } from '../dtos/GenericResponse.dto';
-import { VideoUpdateDto } from '../dtos/videoUpdate.dto';
+import { Video } from './index';
 
 @Injectable()
 export class VideoService {
@@ -107,10 +106,7 @@ export class VideoService {
 		}
 	}
 
-	async updateVideo(
-		id: string,
-		videoData: VideoUpdateDto,
-	): Promise<GenericResponse<Video>> {
+	async updateVideo(id: string, title: string, description: string): Promise<GenericResponse<Video>> {
 		try {
 			const video = await this.findVideoById(id);
 			if (!video) {
@@ -120,7 +116,7 @@ export class VideoService {
 				});
 			}
 
-			await this.videoRepository.update(id, videoData);
+			await this.videoRepository.update(id, { title, description });
 			const updatedVideo = await this.findVideoById(id);
 			return GenericResponse.create<Video>({
 				status: true,

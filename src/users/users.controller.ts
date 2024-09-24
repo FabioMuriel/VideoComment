@@ -1,7 +1,5 @@
 import { Controller, Get, Post, Put, Body, Delete, Param, BadRequestException } from '@nestjs/common';
-import { UserService } from './users.service';
-import { UserCreateDto } from '../dtos/userCreate.dto';
-import { UserUpdateDto } from '../dtos/userUpdate.dto';
+import { UserService, UserCreateDto, UserUpdateDto } from './index';
 
 @Controller('users')
 export class UserController {
@@ -57,7 +55,7 @@ export class UserController {
 
 	@Put(':id')
 	async updateUser(@Param('id') id: string, @Body() user: UserUpdateDto) {
-		const result = await this.userService.updateUser(id, user);
+		const result = await this.userService.updateUser(id, user.name, user.email, user.password);
 		if (!result.status) {
 			throw new BadRequestException(result.message);
 		}

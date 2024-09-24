@@ -1,7 +1,5 @@
 import { Controller, Post, Body, Get, Param, Put, Delete, BadRequestException } from '@nestjs/common';
-import { CommentService } from './comment.service';
-import { Comment } from '../Entities/Comment.Entities';
-import { CommentCreateDto } from '../dtos/CommentCreate.dto';
+import { CommentService, CommentCreateDto, CommentUpdateDto } from './index';
 
 @Controller('comments')
 export class CommentController {
@@ -49,8 +47,8 @@ export class CommentController {
     
 
     @Put(':id')
-    async updateComment(@Param('id') id: string, @Body() comment: Comment) {
-        const result = await this.commentService.updateComment(id, comment);
+    async updateComment(@Param('id') id: string, @Body() comment: CommentUpdateDto) {
+        const result = await this.commentService.updateComment(id, comment.content);
         if (!result.status) {
             throw new BadRequestException(result.message);
         }
