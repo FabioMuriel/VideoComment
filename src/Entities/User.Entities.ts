@@ -20,7 +20,7 @@ export class User {
   createdAt: Date;
 
   @Column({ type: 'datetime', default: null, onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
-  updatedAt: Date;
+  updatedAt: Date | null;
 
   @Column({ type: 'boolean', default: false })
   isDeleted: boolean;

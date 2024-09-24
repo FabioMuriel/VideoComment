@@ -8,17 +8,17 @@ import { Video } from './Entities/Video.Entities';
 import { Comment } from './Entities/Comment.Entities';
 
 @Module({
-  imports: [
-    CommentModule,
-    UserModule,
-    VideoModule,
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'src/config/database.sqlite',
-      entities: [User, Video, Comment],
-      synchronize: false,
-    }),
-    TypeOrmModule.forFeature([User, Video, Comment]),
-  ]
+	imports: [
+		CommentModule,
+		UserModule,
+		VideoModule,
+		TypeOrmModule.forRoot({
+			type: 'sqlite',
+			database: 'src/config/database.sqlite',
+			entities: [User, Video, Comment],
+			synchronize: true,
+		}),
+		TypeOrmModule.forFeature([User, Video, Comment]),
+	],
 })
 export class AppModule {}

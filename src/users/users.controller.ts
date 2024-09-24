@@ -1,33 +1,70 @@
-import { Controller, Get, Post, Put, Body, Delete, Param} from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, Delete, Param, BadRequestException } from '@nestjs/common';
 import { UserService } from './users.service';
 import { UserCreateDto } from '../dtos/userCreate.dto';
 import { UserUpdateDto } from '../dtos/userUpdate.dto';
 
 @Controller('users')
 export class UserController {
-	constructor(private readonly userService: UserService) {}
+	constructor(private readonly userService: UserService) { }
+	
+	@Get()
+	async getUsers() {
+		return this.userService.getUsers();
+	}
 
 	@Get(':id')
-	async getUsers(@Param('id') id: string) {
-		return this.userService.getUser(id);
+	async getUser(@Param('id') id: string) {
+		const result = await this.userService.getUser(id);
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data
+		};
 	}
 
 	@Post()
 	async createUser(@Body() user: UserCreateDto) {
-		return this.userService.createUser(
+		const result = await this.userService.createUser(
 			user.name,
 			user.email,
 			user.password,
 		);
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data
+		};
 	}
 
 	@Delete(':id')
 	async deleteUser(@Param('id') id: string) {
-		return this.userService.deleteUser(id);
+		const result = await this.userService.deleteUser(id);
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data
+		};
 	}
 
 	@Put(':id')
 	async updateUser(@Param('id') id: string, @Body() user: UserUpdateDto) {
-		return this.userService.updateUser(id, user);
+		const result = await this.userService.updateUser(id, user);
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data
+		};
 	}
 }
