@@ -4,8 +4,21 @@ import { UserService, UserCreateDto, UserUpdateDto } from './index';
 @Controller('users')
 export class UserController {
 	constructor(private readonly userService: UserService) { }
-	
-	@Get('deleted') // Cambia a 'deleted' sin la barra inicial
+
+	@Get()
+	async getUsers() {
+		const result = await this.userService.getUsers();
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data
+		};
+	}
+
+	@Get('deleted')
 	async getDeletedUsers() {
 		const result = await this.userService.getDeletedUsers();
 		if (!result.status) {
@@ -18,7 +31,7 @@ export class UserController {
 		};
 	}
 
-	@Get(':id') // Esta ruta debe estar después
+	@Get(':id')
 	async getUser(@Param('id') id: string) {
 		const result = await this.userService.getUser(id);
 		if (!result.status) {
