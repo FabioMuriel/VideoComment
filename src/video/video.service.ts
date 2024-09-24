@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Video } from '../Entities/Video.Entities';
 import { UserService } from '../users/users.service';
 import { v4 } from 'uuid';
+import { VideoUpdateDto } from '../dtos/videUpdate.dto';
 
 @Injectable()
 export class VideoService {
@@ -35,5 +36,20 @@ export class VideoService {
 		};
 
 		return await this.videoRepository.save(newVideo);
+    }
+
+	async deleteVideo(id: string): Promise<void> {
+		await this.videoRepository.delete(id);
 	}
+
+	async updateVideo(id: string, video: VideoUpdateDto): Promise<Video> {
+		await this.videoRepository.update(id, video);
+		return await this.videoRepository.findOne({ where: { id: id } });
+    }
+    
+    async getUserVideos(id: string): Promise<Video[]> {
+        return await this.videoRepository.find({ where: { user: { id: id } } });
+    }
+    
+    
 }

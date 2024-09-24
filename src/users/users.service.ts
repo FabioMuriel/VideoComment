@@ -4,15 +4,12 @@ import { Repository } from 'typeorm';
 import { User } from '../Entities/User.Entities';
 import { v4 } from 'uuid';
 import { UserUpdateDto } from '../dtos/userUpdate.dto';
-import { Video } from '../Entities/Video.Entities';
 
 @Injectable()
 export class UserService {
 	constructor(
 		@InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @InjectRepository(Video)
-        private readonly videoRepository: Repository<Video>,
 	) {}
 
 	async getUser(id: string): Promise<User[]> {
@@ -41,8 +38,5 @@ export class UserService {
 
 		return await this.userRepository.findOne({ where: { id: id } });
     }
-    
-    async getUserVideos(id: string): Promise<Video[]> {
-        return await this.videoRepository.find({ where: { user: { id: id } } });
-    }
+
 }

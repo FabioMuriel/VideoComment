@@ -13,11 +13,11 @@ export class Comment {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime', default: null, onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
   updatedAt: Date;
 
-  @Column({ type: 'datetime', nullable: true })
-  deletedAt: Date;
+  @Column({ type: 'boolean', default: false })
+  isDeleted: boolean;
 
   @ManyToOne(() => User, (user) => user.comments) // Relación muchos a uno
   user: User;

@@ -19,7 +19,7 @@ export class User {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
+  @Column({ type: 'datetime', default: null, onUpdate: 'CURRENT_TIMESTAMP', nullable: true })
   updatedAt: Date;
 
   @Column({ type: 'boolean', default: false })

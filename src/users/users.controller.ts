@@ -30,9 +30,4 @@ export class UserController {
 	async updateUser(@Param('id') id: string, @Body() user: UserUpdateDto) {
 		return this.userService.updateUser(id, user);
 	}
-
-	@Get(':id/videos')
-	async getUserVideos(@Param('id') id: string) {
-		return this.userService.getUserVideos(id);
-	}
 }
