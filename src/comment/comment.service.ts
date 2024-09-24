@@ -75,7 +75,7 @@ export class CommentService {
 
     async updateComment(id: string, commentContent: string): Promise<GenericResponse<Comment>> {
         await this.findCommentById(id);
-		await this.commentRepository.update(id, { content: commentContent });
+		await this.commentRepository.update(id, { content: commentContent, updatedAt: new Date() });
         const updatedComment = await this.getComment(id);
         const message = updatedComment ? 'Comentario actualizado correctamente' : 'Comentario no encontrado';
 
@@ -87,7 +87,13 @@ export class CommentService {
 	}
 
     async deleteComment(id: string): Promise<GenericResponse<void>> {
-        await this.findCommentById(id);
+        const comment = await this.findCommentById(id);
+        if(!comment){
+            return GenericResponse.create<void>({
+                status: false,
+                message: 'Comentario no encontrado',
+            });
+        }
 		const deletedComment = await this.commentRepository.update(id, { isDeleted: true });
         const message = deletedComment ? 'Comentario eliminado correctamente' : 'Error al eliminar el comentario';
 

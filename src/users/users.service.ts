@@ -99,9 +99,15 @@ export class UserService {
 		password: string,
 	): Promise<GenericResponse<User>> {
 		try {
-			await this.findUserById(id);
+            const user = await this.findUserById(id);
+            if(!user){
+                return GenericResponse.create<User>({
+                    status: false,
+                    message: 'Usuario no encontrado',
+                });
+            }
 
-			await this.userRepository.update(id, { name, email, password });
+			await this.userRepository.update(id, { name, email, password, updatedAt: new Date() });
 			const updatedUser = await this.userRepository.findOne({
 				where: { id },
 			});

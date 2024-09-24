@@ -116,7 +116,7 @@ export class VideoService {
 				});
 			}
 
-			await this.videoRepository.update(id, { title, description });
+			await this.videoRepository.update(id, { title, description, updatedAt: new Date() });
 			const updatedVideo = await this.findVideoById(id);
 			return GenericResponse.create<Video>({
 				status: true,
