@@ -16,7 +16,7 @@ import { Comment } from './Entities/Comment.Entities';
 			type: 'sqlite',
 			database: 'src/config/database.sqlite',
 			entities: [User, Video, Comment],
-			synchronize: true,
+			synchronize: false,
 		}),
 		TypeOrmModule.forFeature([User, Video, Comment]),
 	],
