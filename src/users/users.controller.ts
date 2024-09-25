@@ -1,11 +1,11 @@
-import { Controller, Get, Post, Put, Body, Delete, Param, BadRequestException } from '@nestjs/common';
+import {Controller, Get, Post, Put, Body, Delete, Param, BadRequestException} from '@nestjs/common';
 import { UserService } from './users.service';
-import { UserCreateDto } from '../dtos/UserCreate.dto';
-import { UserUpdateDto } from '../dtos/UserUpdate.dto';
+import { UserCreateDto } from '../Dtos/UserCreate.Dto';
+import { UserUpdateDto } from '../Dtos/UserUpdate.Dto';
 
 @Controller('users')
-export class UserController {
-	constructor(private readonly userService: UserService) { }
+export class UsersController {
+	constructor(private readonly userService: UserService) {}
 
 	@Get()
 	async getUsers() {
@@ -16,7 +16,7 @@ export class UserController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -29,7 +29,7 @@ export class UserController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -42,7 +42,7 @@ export class UserController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -59,7 +59,7 @@ export class UserController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -72,20 +72,25 @@ export class UserController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
 	@Put(':id')
 	async updateUser(@Param('id') id: string, @Body() user: UserUpdateDto) {
-		const result = await this.userService.updateUser(id, user.name, user.email, user.password);
+		const result = await this.userService.updateUser(
+			id,
+			user.name,
+			user.email,
+			user.password,
+		);
 		if (!result.status) {
 			throw new BadRequestException(result.message);
 		}
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 }

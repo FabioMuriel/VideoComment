@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from '../Entities/Comment.Entities';
-import { GenericResponse } from '../dtos/GenericResponse.dto';
+import { GenericResponse } from '../Dtos/GenericResponse.Dto';
 import { v4 } from 'uuid';
 import { UserService } from '../users/users.service';
 import { VideoService } from '../video/video.service';
@@ -14,19 +14,20 @@ export class CommentService {
 		private readonly commentRepository: Repository<Comment>,
 		private readonly userService: UserService,
 		private readonly videoService: VideoService,
-    ) { }
-    
-    private async findCommentById(id: string): Promise<Comment> {
-        return await this.commentRepository.findOne({ where: { id: id } });
-    }
+	) {}
+
+	private async findCommentById(id: string): Promise<Comment> {
+		return await this.commentRepository.findOne({ where: { id: id } });
+	}
 
 	async getComments(): Promise<GenericResponse<Comment[]>> {
-        const comments = await this.commentRepository.find();
-        
-        const message = comments.length === 0
-            ? 'No hay comentarios'
-            : 'Comentarios encontrados';
-        
+		const comments = await this.commentRepository.find();
+
+		const message =
+			comments.length === 0
+				? 'No hay comentarios'
+				: 'Comentarios encontrados';
+
 		return GenericResponse.create<Comment[]>({
 			status: true,
 			message: message,
@@ -34,7 +35,11 @@ export class CommentService {
 		});
 	}
 
-	async createComment(content: string, videoId: string, userId: string): Promise<GenericResponse<Comment>> {
+	async createComment(
+		content: string,
+		videoId: string,
+		userId: string,
+	): Promise<GenericResponse<Comment>> {
 		const user = await this.userService.getUser(userId);
 		if (!user || !user.status) {
 			return GenericResponse.create<Comment>({
@@ -43,7 +48,7 @@ export class CommentService {
 				data: null,
 			});
 		}
-	
+
 		const video = await this.videoService.findVideoById(videoId);
 		if (!video) {
 			return GenericResponse.create<Comment>({
@@ -52,7 +57,7 @@ export class CommentService {
 				data: null,
 			});
 		}
-	
+
 		const newComment: Comment = {
 			id: v4(),
 			content: content,
@@ -62,22 +67,26 @@ export class CommentService {
 			user: user.data,
 			video: video,
 		};
-	
+
 		const saveComment = await this.commentRepository.save(newComment);
-		const message = saveComment ? 'Comentario creado correctamente' : 'Error al crear el comentario';
-	
+		const message = saveComment
+			? 'Comentario creado correctamente'
+			: 'Error al crear el comentario';
+
 		return GenericResponse.create<Comment>({
 			status: !!saveComment,
 			message: message,
 			data: saveComment,
 		});
 	}
-	
+
 	async getComment(id: string): Promise<GenericResponse<Comment>> {
-        const comment = await this.findCommentById(id);        
-		const message = comment ? 'Comentario encontrado' : 'Comentario no encontrado';
-		
-		if(!comment){
+		const comment = await this.findCommentById(id);
+		const message = comment
+			? 'Comentario encontrado'
+			: 'Comentario no encontrado';
+
+		if (!comment) {
 			return GenericResponse.create<Comment>({
 				status: false,
 				message: message,
@@ -92,19 +101,27 @@ export class CommentService {
 		});
 	}
 
-    async updateComment(id: string, commentContent: string): Promise<GenericResponse<Comment>> {
-        const comment = await this.findCommentById(id);
-		if(!comment){
+	async updateComment(
+		id: string,
+		commentContent: string,
+	): Promise<GenericResponse<Comment>> {
+		const comment = await this.findCommentById(id);
+		if (!comment) {
 			return GenericResponse.create<Comment>({
 				status: false,
 				message: 'Comentario no encontrado',
 				data: null,
 			});
 		}
-		
-		await this.commentRepository.update(id, { content: commentContent, updatedAt: new Date() });
-        const updatedComment = await this.getComment(id);
-        const message = updatedComment ? 'Comentario actualizado correctamente' : 'Comentario no encontrado';
+
+		await this.commentRepository.update(id, {
+			content: commentContent,
+			updatedAt: new Date(),
+		});
+		const updatedComment = await this.getComment(id);
+		const message = updatedComment
+			? 'Comentario actualizado correctamente'
+			: 'Comentario no encontrado';
 
 		return GenericResponse.create<Comment>({
 			status: true,
@@ -116,7 +133,7 @@ export class CommentService {
 	async deleteComment(id: string): Promise<GenericResponse<void>> {
 		try {
 			const comment = await this.findCommentById(id);
-			if(!comment){
+			if (!comment) {
 				return GenericResponse.create<void>({
 					status: false,
 					message: 'Comentario no encontrado',

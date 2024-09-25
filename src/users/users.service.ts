@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../Entities/User.Entities';
 import { v4 } from 'uuid';
-import { GenericResponse } from '../dtos/GenericResponse.dto';
+import { GenericResponse } from '../Dtos/GenericResponse.Dto';
 
 @Injectable()
 export class UserService {
@@ -21,7 +21,9 @@ export class UserService {
 	}
 
 	async getUsers(): Promise<GenericResponse<User[]>> {
-		const users = await this.userRepository.find({ where: { isDeleted: false } });
+		const users = await this.userRepository.find({
+			where: { isDeleted: false },
+		});
 		const message =
 			users.length === 0 ? 'No hay usuarios' : 'Usuarios encontrados';
 
@@ -30,19 +32,23 @@ export class UserService {
 			message,
 			data: users,
 		});
-    }
-    
-    async getDeletedUsers(): Promise<GenericResponse<User[]>> {
-        const users = await this.userRepository.find({ where: { isDeleted: true } });
-        const message =
-			users.length === 0 ? 'No hay usuarios eliminados' : 'Usuarios eliminados';
+	}
+
+	async getDeletedUsers(): Promise<GenericResponse<User[]>> {
+		const users = await this.userRepository.find({
+			where: { isDeleted: true },
+		});
+		const message =
+			users.length === 0
+				? 'No hay usuarios eliminados'
+				: 'Usuarios eliminados';
 
 		return GenericResponse.create<User[]>({
 			status: true,
 			message,
 			data: users,
-        });
-    }
+		});
+	}
 
 	async getUser(id: string): Promise<GenericResponse<User>> {
 		const user = await this.findUserById(id);
@@ -111,15 +117,20 @@ export class UserService {
 		password: string,
 	): Promise<GenericResponse<User>> {
 		try {
-            const user = await this.findUserById(id);
-            if(!user){
-                return GenericResponse.create<User>({
-                    status: false,
-                    message: 'Usuario no encontrado',
-                });
-            }
+			const user = await this.findUserById(id);
+			if (!user) {
+				return GenericResponse.create<User>({
+					status: false,
+					message: 'Usuario no encontrado',
+				});
+			}
 
-			await this.userRepository.update(id, { name, email, password, updatedAt: new Date() });
+			await this.userRepository.update(id, {
+				name,
+				email,
+				password,
+				updatedAt: new Date(),
+			});
 			const updatedUser = await this.userRepository.findOne({
 				where: { id },
 			});

@@ -1,11 +1,20 @@
-import {Controller, Get, Post, Delete, Put, Body, Param, BadRequestException} from '@nestjs/common';
+import {
+	Controller,
+	Get,
+	Post,
+	Delete,
+	Put,
+	Body,
+	Param,
+	BadRequestException,
+} from '@nestjs/common';
 import { VideoService } from './video.service';
-import { VideoCreateDto } from '../dtos/VideoCreate.dto';
-import { VideoUpdateDto } from '../dtos/VideoUpdate.dto';
+import { VideoCreateDto } from '../Dtos/videoCreate.Dto';
+import { VideoUpdateDto } from '../Dtos/videoUpdate.Dto';
 
 @Controller('video')
 export class VideoController {
-	constructor(private readonly videoService: VideoService) { }
+	constructor(private readonly videoService: VideoService) {}
 
 	@Get()
 	async getVideos() {
@@ -16,7 +25,7 @@ export class VideoController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -29,7 +38,7 @@ export class VideoController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -42,7 +51,7 @@ export class VideoController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -59,7 +68,7 @@ export class VideoController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -72,20 +81,24 @@ export class VideoController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
 	@Put(':id')
 	async updateVideo(@Param('id') id: string, @Body() video: VideoUpdateDto) {
-		const result = await this.videoService.updateVideo(id, video.title, video.description);
+		const result = await this.videoService.updateVideo(
+			id,
+			video.title,
+			video.description,
+		);
 		if (!result.status) {
 			throw new BadRequestException(result.message);
 		}
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 
@@ -98,7 +111,7 @@ export class VideoController {
 		return {
 			status: result.status,
 			message: result.message,
-			data: result.data
+			data: result.data,
 		};
 	}
 }

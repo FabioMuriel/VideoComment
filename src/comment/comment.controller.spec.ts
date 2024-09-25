@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
-import { GenericResponse } from '../dtos/GenericResponse.dto';
+import { GenericResponse } from '../Dtos/GenericResponse.Dto';
 import { BadRequestException } from '@nestjs/common';
 import { Comment } from '../entities/Comment.Entities';
 
@@ -46,12 +46,12 @@ describe('CommentController', () => {
 	});
 
 	it('should throw BadRequestException when getComment fails', async () => {
-    const result = {
-      status: false,
-      message: 'Comentario no encontrado'
-    };
+		const result = {
+			status: false,
+			message: 'Comentario no encontrado',
+		};
 
-    jest.spyOn(commentService, 'getComment').mockResolvedValue(result);
+		jest.spyOn(commentService, 'getComment').mockResolvedValue(result);
 
 		await expect(controller.getComment('non-existing-id')).rejects.toThrow(
 			BadRequestException,
@@ -64,7 +64,9 @@ describe('CommentController', () => {
 			message: 'Comentario encontrado',
 			data: {},
 		};
-		jest.spyOn(commentService, 'getComment').mockResolvedValue(result as GenericResponse<Comment>);
+		jest.spyOn(commentService, 'getComment').mockResolvedValue(
+			result as GenericResponse<Comment>,
+		);
 
 		expect(await controller.getComment('1')).toEqual(result);
 	});
@@ -76,7 +78,9 @@ describe('CommentController', () => {
 			userId: '1',
 		};
 		const result = { status: true, message: 'Comentario creado', data: {} };
-		jest.spyOn(commentService, 'createComment').mockResolvedValue(result as GenericResponse<Comment>);
+		jest.spyOn(commentService, 'createComment').mockResolvedValue(
+			result as GenericResponse<Comment>,
+		);
 
 		expect(await controller.createComment(commentDto)).toEqual(result);
 	});
@@ -101,7 +105,9 @@ describe('CommentController', () => {
 			message: 'Comentario actualizado',
 			data: {},
 		};
-		jest.spyOn(commentService, 'updateComment').mockResolvedValue(result as GenericResponse<Comment>);
+		jest.spyOn(commentService, 'updateComment').mockResolvedValue(
+			result as GenericResponse<Comment>,
+		);
 
 		expect(
 			await controller.updateComment('1', { content: 'Updated comment' }),

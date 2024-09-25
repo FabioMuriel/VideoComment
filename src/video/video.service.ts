@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from '../users/users.service';
 import { v4 } from 'uuid';
-import { GenericResponse } from '../dtos/GenericResponse.dto';
+import { GenericResponse } from '../Dtos/GenericResponse.Dto';
 import { Video } from '../entities/Video.Entities';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VideoController } from './video.controller';
 import { VideoService } from './video.service';
 import { BadRequestException } from '@nestjs/common';
-import { GenericResponse } from '../dtos/GenericResponse.dto';
+import { GenericResponse } from '../Dtos/GenericResponse.Dto';
 import { Video } from '../Entities/Video.Entities';
 
 describe('VideoController', () => {
@@ -99,7 +99,9 @@ describe('VideoController', () => {
 				message: 'Video encontrado',
 				data: { id: '1', title: 'Video' },
 			};
-			jest.spyOn(service, 'getVideo').mockResolvedValue(mockResult as GenericResponse<Video>);
+			jest.spyOn(service, 'getVideo').mockResolvedValue(
+				mockResult as GenericResponse<Video>,
+			);
 
 			const result = await controller.getVideo('1');
 			expect(result).toEqual(mockResult);
@@ -130,7 +132,9 @@ describe('VideoController', () => {
 				message: 'Video creado correctamente',
 				data: { id: '1', ...mockCreateDto },
 			};
-			jest.spyOn(service, 'createVideo').mockResolvedValue(mockResult as unknown as GenericResponse<Video>);
+			jest.spyOn(service, 'createVideo').mockResolvedValue(
+				mockResult as unknown as GenericResponse<Video>,
+			);
 
 			const result = await controller.createVideo(mockCreateDto);
 			expect(result).toEqual(mockResult);
@@ -190,7 +194,9 @@ describe('VideoController', () => {
 				message: 'Video actualizado correctamente',
 				data: { id: '1', ...mockUpdateDto },
 			};
-			jest.spyOn(service, 'updateVideo').mockResolvedValue(mockResult as GenericResponse<Video>);
+			jest.spyOn(service, 'updateVideo').mockResolvedValue(
+				mockResult as GenericResponse<Video>,
+			);
 
 			const result = await controller.updateVideo('1', mockUpdateDto);
 			expect(result).toEqual(mockResult);
