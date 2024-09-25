@@ -54,15 +54,13 @@ describe('VideoService', () => {
 			description: 'Video Description',
 			user: user,
 		};
-
-		// Mocking userService.getUser to return a valid user
+		
 		jest.spyOn(userService, 'getUser').mockResolvedValue({
-			status: true, // Correct status
+			status: true,
 			message: 'Usuario encontrado',
 			data: user as User,
 		});
 
-		// Mocking videoRepository.save to return the new video
 		jest.spyOn(videoRepository, 'save').mockResolvedValue(video as any);
 
 		const result = await service.createVideo(
@@ -71,12 +69,9 @@ describe('VideoService', () => {
 			'1', // userId
 		);
 
-		// Verifying that the result is successful
-		expect(result.status).toBe(true); // Expecting success
-		expect(result.data).toEqual(video as Video); // Verifying returned video
+		expect(result.status).toBe(true);
+		expect(result.data).toEqual(video as Video);
 	});
-
-	//TODO: Fin de la prueba de creación de video
 
 	it('should throw an error when user not found while creating video', async () => {
 		jest.spyOn(userService, 'getUser').mockResolvedValue({

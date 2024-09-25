@@ -3,14 +3,14 @@ import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Comment } from '../Entities/Comment.Entities';
-import { UserService } from '../users/users.service';
-import { VideoService } from '../video/video.service';
+import { UserModule } from '../users/users.module';
+import { VideoModule } from '../video/video.module';
 import { User } from '../Entities/User.Entities';
 import { Video } from '../Entities/Video.Entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment, User, Video])],
-  providers: [CommentService, UserService, VideoService],
+  imports: [TypeOrmModule.forFeature([Comment, User, Video]), UserModule, VideoModule],
+  providers: [CommentService],  
   controllers: [CommentController],
   exports: [CommentService]
 })

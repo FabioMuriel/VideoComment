@@ -55,6 +55,19 @@ export class UsersController {
 		};
 	}
 
+	@Get(':id/videos')
+	async getUserVideos(@Param('id') id: string) {
+		const result = await this.userService.getUserVideos(id);
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data,
+		};
+	}
+
 	@Post()
 	async createUser(@Body() user: UserCreateDto) {
 		const result = await this.userService.createUser(

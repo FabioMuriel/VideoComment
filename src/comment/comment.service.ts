@@ -6,9 +6,10 @@ import { GenericResponse } from '../dto/GenericResponse.dto';
 import { v4 } from 'uuid';
 import { UserService } from '../users/users.service';
 import { VideoService } from '../video/video.service';
+import { ICommentService } from '../interfaces/CommentService.interface';
 
 @Injectable()
-export class CommentService {
+export class CommentService implements ICommentService {
 	constructor(
 		@InjectRepository(Comment)
 		private readonly commentRepository: Repository<Comment>,
@@ -16,7 +17,7 @@ export class CommentService {
 		private readonly videoService: VideoService,
 	) {}
 
-	private async findCommentById(id: string): Promise<Comment> {
+	async findCommentById(id: string): Promise<Comment> {
 		return await this.commentRepository.findOne({ where: { id: id } });
 	}
 
@@ -167,6 +168,7 @@ export class CommentService {
 
 			const comments = await this.commentRepository.find({
 				where: { video: { id: id } },
+				relations: ['user'],
 			});
 
 			const message =

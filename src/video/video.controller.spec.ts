@@ -21,8 +21,7 @@ describe('VideoController', () => {
 						getVideo: jest.fn(),
 						createVideo: jest.fn(),
 						deleteVideo: jest.fn(),
-						updateVideo: jest.fn(),
-						getUserVideos: jest.fn(),
+						updateVideo: jest.fn()
 					},
 				},
 			],
@@ -216,32 +215,6 @@ describe('VideoController', () => {
 			await expect(
 				controller.updateVideo('1', mockUpdateDto),
 			).rejects.toThrow(BadRequestException);
-		});
-	});
-
-	describe('getUserVideos', () => {
-		it('should return videos of a user successfully', async () => {
-			const mockResult = {
-				status: true,
-				message: 'Videos de usuario encontrados',
-				data: [],
-			};
-			jest.spyOn(service, 'getUserVideos').mockResolvedValue(mockResult);
-
-			const result = await controller.getUserVideos('123');
-			expect(result).toEqual(mockResult);
-		});
-
-		it('should throw a BadRequestException when it fails', async () => {
-			const mockResult = {
-				status: false,
-				message: 'Error al obtener videos del usuario',
-			};
-			jest.spyOn(service, 'getUserVideos').mockResolvedValue(mockResult);
-
-			await expect(controller.getUserVideos('123')).rejects.toThrow(
-				BadRequestException,
-			);
 		});
 	});
 });

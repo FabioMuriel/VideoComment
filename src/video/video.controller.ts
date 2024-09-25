@@ -101,17 +101,4 @@ export class VideoController {
 			data: result.data,
 		};
 	}
-
-	@Get(':id/videos')
-	async getUserVideos(@Param('id') id: string) {
-		const result = await this.videoService.getUserVideos(id);
-		if (!result.status) {
-			throw new BadRequestException(result.message);
-		}
-		return {
-			status: result.status,
-			message: result.message,
-			data: result.data,
-		};
-	}
 }

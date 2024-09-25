@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from '../users/users.service';
 import { v4 } from 'uuid';
 import { GenericResponse } from '../dto/GenericResponse.dto';
 import { Video } from '../Entities/Video.Entities';
+import { IVideoService } from '../interfaces/VideoService.interface';
 
 @Injectable()
-export class VideoService {
+export class VideoService implements IVideoService {
 	constructor(
 		@InjectRepository(Video)
 		private readonly videoRepository: Repository<Video>,
+
+		@Inject(forwardRef(() => UserService))
 		private readonly userService: UserService,
 	) {}
 

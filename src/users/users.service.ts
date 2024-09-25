@@ -1,18 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../Entities/User.Entities';
 import { v4 } from 'uuid';
 import { GenericResponse } from '../dto/GenericResponse.dto';
+import { Video } from '../Entities/Video.Entities';
+import { VideoService } from '../video/video.service';
+import { forwardRef } from '@nestjs/common';
+import { IUsersService } from '../interfaces/UsersService.interface';
 
 @Injectable()
-export class UserService {
+export class UserService implements IUsersService {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
+
+		@Inject(forwardRef(() => VideoService))
+		private readonly videoService: VideoService
 	) {}
 
-	private async findUserById(id: string): Promise<User> {
+	async findUserById(id: string): Promise<User> {
 		const user = await this.userRepository.findOne({ where: { id } });
 		if (!user) {
 			throw new NotFoundException('Usuario no encontrado');
@@ -59,11 +66,19 @@ export class UserService {
 		});
 	}
 
-	async createUser(
-		name: string,
-		email: string,
-		password: string,
-	): Promise<GenericResponse<User>> {
+	async getUserVideos(userId: string): Promise<GenericResponse<Video[]>> {
+		const userVideos = await this.videoService.getUserVideos(userId);
+
+		const message =
+			userVideos.data.length === 0 ? 'No hay videos' : 'Videos encontrados';
+		return GenericResponse.create<Video[]>({
+			status: true,
+			message,
+			data: userVideos.data,
+		});
+	}
+
+	async createUser(name: string, email: string, password: string): Promise<GenericResponse<User>> {
 		const newUser: User = {
 			id: v4(),
 			name,
@@ -148,4 +163,5 @@ export class UserService {
 			});
 		}
 	}
+
 }
