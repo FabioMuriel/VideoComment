@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommentController } from './comment.controller';
-import { CommentService } from './index';
+import { CommentService } from './comment.service';
 import { GenericResponse } from '../dtos/GenericResponse.dto';
 import { BadRequestException } from '@nestjs/common';
 import { Comment } from '../entities/Comment.Entities';
