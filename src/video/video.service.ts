@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UserService } from '../users/users.service';
 import { v4 } from 'uuid';
 import { GenericResponse } from '../dtos/GenericResponse.dto';
-import { Video } from './index';
+import { Video } from '../entities/Video.Entities';
 
 @Injectable()
 export class VideoService {
@@ -69,15 +69,19 @@ export class VideoService {
 			const user = await this.userService
 				.getUser(userId)
 				.then((res) => res.data);
-			if (!user) throw new Error('Usuario no encontrado');
 
-			const newVideo = this.videoRepository.create({
+			if (!user.id) throw new Error('Usuario no encontrado');
+
+			const newVideo = {
 				id: v4(),
-				title,
-				description,
-				user,
+				title: title,
+				description: description,
+				user: user,
 				createdAt: new Date(),
-			});
+				updatedAt: null,
+				isDeleted: false,
+				comments: [],
+			};
 
 			const video = await this.videoRepository.save(newVideo);
 			return GenericResponse.create<Video>({

@@ -1,5 +1,7 @@
 import {Controller, Get, Post, Delete, Put, Body, Param, BadRequestException} from '@nestjs/common';
-import { VideoService, VideoCreateDto, VideoUpdateDto } from './index';
+import { VideoService } from './video.service';
+import { VideoCreateDto } from '../dtos/VideoCreate.dto';
+import { VideoUpdateDto } from '../dtos/VideoUpdate.dto';
 
 @Controller('video')
 export class VideoController {

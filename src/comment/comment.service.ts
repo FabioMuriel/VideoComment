@@ -35,12 +35,24 @@ export class CommentService {
 	}
 
 	async createComment(content: string, videoId: string, userId: string): Promise<GenericResponse<Comment>> {
-		const user = await this.userService
-			.getUser(userId)
-        
-		const video = await this.videoService
-			.findVideoById(videoId)
-
+		const user = await this.userService.getUser(userId);
+		if (!user || !user.status) {
+			return GenericResponse.create<Comment>({
+				status: false,
+				message: 'Error al crear el comentario: Usuario no encontrado',
+				data: null,
+			});
+		}
+	
+		const video = await this.videoService.findVideoById(videoId);
+		if (!video) {
+			return GenericResponse.create<Comment>({
+				status: false,
+				message: 'Error al crear el comentario: Video no encontrado',
+				data: null,
+			});
+		}
+	
 		const newComment: Comment = {
 			id: v4(),
 			content: content,
@@ -49,22 +61,29 @@ export class CommentService {
 			isDeleted: false,
 			user: user.data,
 			video: video,
-        };
-        
-        const saveComment = await this.commentRepository.save(newComment);
-        const message = saveComment ? 'Comentario creado correctamente' : 'Error al crear el comentario';
-
-        return GenericResponse.create<Comment>({
-            status: true,
-            message: message,
-            data: saveComment,
-        });
-
+		};
+	
+		const saveComment = await this.commentRepository.save(newComment);
+		const message = saveComment ? 'Comentario creado correctamente' : 'Error al crear el comentario';
+	
+		return GenericResponse.create<Comment>({
+			status: !!saveComment,
+			message: message,
+			data: saveComment,
+		});
 	}
-
+	
 	async getComment(id: string): Promise<GenericResponse<Comment>> {
         const comment = await this.findCommentById(id);        
-        const message = comment ? 'Comentario encontrado' : 'Comentario no encontrado';
+		const message = comment ? 'Comentario encontrado' : 'Comentario no encontrado';
+		
+		if(!comment){
+			return GenericResponse.create<Comment>({
+				status: false,
+				message: message,
+				data: null,
+			});
+		}
 
 		return GenericResponse.create<Comment>({
 			status: true,
@@ -74,7 +93,15 @@ export class CommentService {
 	}
 
     async updateComment(id: string, commentContent: string): Promise<GenericResponse<Comment>> {
-        await this.findCommentById(id);
+        const comment = await this.findCommentById(id);
+		if(!comment){
+			return GenericResponse.create<Comment>({
+				status: false,
+				message: 'Comentario no encontrado',
+				data: null,
+			});
+		}
+		
 		await this.commentRepository.update(id, { content: commentContent, updatedAt: new Date() });
         const updatedComment = await this.getComment(id);
         const message = updatedComment ? 'Comentario actualizado correctamente' : 'Comentario no encontrado';
@@ -86,21 +113,26 @@ export class CommentService {
 		});
 	}
 
-    async deleteComment(id: string): Promise<GenericResponse<void>> {
-        const comment = await this.findCommentById(id);
-        if(!comment){
-            return GenericResponse.create<void>({
-                status: false,
-                message: 'Comentario no encontrado',
-            });
-        }
-		const deletedComment = await this.commentRepository.update(id, { isDeleted: true });
-        const message = deletedComment ? 'Comentario eliminado correctamente' : 'Error al eliminar el comentario';
-
-		return GenericResponse.create<void>({
-			status: true,
-			message: message,
-			data: null,
-		});
+	async deleteComment(id: string): Promise<GenericResponse<void>> {
+		try {
+			const comment = await this.findCommentById(id);
+			if(!comment){
+				return GenericResponse.create<void>({
+					status: false,
+					message: 'Comentario no encontrado',
+				});
+			}
+			await this.commentRepository.update(id, { isDeleted: true });
+			return GenericResponse.create<void>({
+				status: true,
+				message: 'Comentario eliminado correctamente',
+			});
+		} catch (error) {
+			return GenericResponse.create<void>({
+				status: false,
+				message: 'Error al eliminar el comentario',
+				errors: [error.message],
+			});
+		}
 	}
 }
