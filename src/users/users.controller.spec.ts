@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from './users.controller';
+import { UsersController } from './users.controller';
 import { UserService } from './users.service';
 import { BadRequestException } from '@nestjs/common';
 import { User } from '../Entities/User.Entities';
 
-describe('UserController', () => {
-	let controller: UserController;
+describe('UsersController', () => {
+	let controller: UsersController;
 	let service: UserService;
 
 	const mockUserService = {
@@ -19,7 +19,7 @@ describe('UserController', () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			controllers: [UserController],
+			controllers: [UsersController],
 			providers: [
 				{
 					provide: UserService,
@@ -28,7 +28,7 @@ describe('UserController', () => {
 			],
 		}).compile();
 
-		controller = module.get<UserController>(UserController);
+		controller = module.get<UsersController>(UsersController);
 		service = module.get<UserService>(UserService);
 	});
 
