@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { UserService } from '../users/users.service';
 import { v4 } from 'uuid';
 import { GenericResponse } from '../dto/GenericResponse.dto';
-import { Video } from '../entities/Video.Entities';
+import { Video } from '../Entities/Video.Entities';
 
 @Injectable()
 export class VideoService {
