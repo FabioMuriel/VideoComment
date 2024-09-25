@@ -12,18 +12,22 @@
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
 <a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
 <a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-</p>
+
 
 ## Descripción
 
-Este es un proyecto basado en [Nest](https://github.com/nestjs/nest) que permite a los usuarios realizar comentarios en los vídeos publicados por otros usuarios. 
+Este es un proyecto basado en [Nest](https://github.com/nestjs/nest) que permite a los usuarios realizar comentarios en los vídeos publicados por otros usuarios. Este proyecto se realizo con el fin de darle solucion a una problematica planteada en una prueba tecnica.
 
 ### Versiones utilizadas
-- **Node.js**: v20.x
-- **NestJS**: v10.x
-- **TypeScript**: v5.x
-- **MySql**: 
+
+-   **Node.js**: v20.14.0
+-   **NestJS**: v10.4.5
+-   **TypeScript**: v5.1.3
+-   **Sqlite**: v5.1.7
+-   **Jest**: v29.5.2
+-   **TypeORM**: v10.0.2
+
+## Si no tienes instalado Node.js, NestJS y TypeScript, puedes seguir los pasos de la siguiente [documentación](./Environment%20Settings.md)
 
 ## Configuración del Proyecto
 
@@ -37,7 +41,7 @@ $ npm install
 # desarrollo
 $ npm run start
 
-# modo de vigilancia
+# modo watch
 $ npm run start:dev
 
 # modo de producción
@@ -50,9 +54,6 @@ $ npm run start:prod
 # pruebas unitarias
 $ npm run test
 
-# pruebas e2e
-$ npm run test:e2e
-
 # cobertura de pruebas
 $ npm run test:cov
 ```
@@ -61,64 +62,44 @@ $ npm run test:cov
 
 Las entidades involucradas en esta funcionalidad son:
 
-- **Usuario (User)**:
-  - `id`: Identificador único del usuario (PK).
-  - `nombre`: Nombre del usuario.
-  - `email`: Correo electrónico del usuario.
+-   **User**:
 
-- **Vídeo (Video)**:
-  - `id`: Identificador único del vídeo (PK).
-  - `titulo`: Título del vídeo.
-  - `url`: URL del vídeo.
-  - `id_usuario`: Identificador del usuario que publicó el vídeo (FK).
+    -   `id`: Identificador único del usuario (PK).
+    -   `name`: Nombre del usuario.
+    -   `email`: Correo electrónico del usuario.
+    -   `password`: Contraseña del usuario.
+    -   `createdAt`: Fecha y hora de creación del usuario.
+    -   `updatedAt`: Fecha y hora de la última actualización del usuario.
+    -   `isDeleted`: Indica si el usuario ha sido eliminado.
+    -   `videos`: Relación con los vídeos publicados por el usuario.
+    -   `comments`: Relación con los comentarios realizados por el usuario.
 
-- **Comentario (Comment)**:
-  - `id`: Identificador único del comentario (PK).
-  - `texto`: Texto del comentario.
-  - `id_video`: Identificador del vídeo al que pertenece el comentario (FK).
-  - `id_usuario`: Identificador del usuario que hizo el comentario (FK).
+-   **Video**:
 
-### Diagrama Entidad-Relación
+    -   `id`: Identificador único del vídeo (PK).
+    -   `title`: Título del vídeo.
+    -   `description`: Descripción del vídeo.
+    -   `id_usuario`: Identificador del usuario que publicó el vídeo (FK).
+    -   `createdAt`: Fecha y hora de creación del vídeo.
+    -   `updatedAt`: Fecha y hora de la última actualización del vídeo.
+    -   `isDeleted`: Indica si el vídeo ha sido eliminado.
+    -   `user`: Relación con el usuario que publicó el vídeo.
+    -   `comments`: Relación con los comentarios del vídeo.
 
-```mermaid
-erDiagram
-    USER {
-        string id PK
-        string nombre
-        string email
-    }
-    VIDEO {
-        string id PK
-        string titulo
-        string url
-        string id_usuario FK
-    }
-    COMMENT {
-        string id PK
-        string texto
-        string id_video FK
-        string id_usuario FK
-    }
+-   **Comment**:
+    -   `id`: Identificador único del comentario (PK).
+    -   `content`: Texto del comentario.
+    -   `createdAt`: Fecha y hora de creación del comentario.
+    -   `updatedAt`: Fecha y hora de la última actualización del comentario.
+    -   `isDeleted`: Indica si el comentario ha sido eliminado.
+    -   `id_video`: Identificador del vídeo al que pertenece el comentario (FK).
+    -   `id_usuario`: Identificador del usuario que hizo el comentario (FK).
 
-    USER ||--o{ VIDEO : publishes
-    USER ||--o{ COMMENT : writes
-    VIDEO ||--o{ COMMENT : has
-```
+### **Diagrama Entidad-Relación**
 
-## Documentación de Endpoints
+![alt text](image.png)
 
-Aquí puedes documentar los endpoints de tu API. Te recomiendo usar [Postman](https://www.postman.com/) o [ApiDog](https://apidog.com/) para crear la documentación.
+ 
 
-```
-
-### Notas
-
-1. **Actualiza las versiones**: Asegúrate de actualizar las versiones de Node.js, NestJS y cualquier otra tecnología que estés utilizando en el proyecto.
-
-2. **Información de contacto**: Cambia la información de contacto y enlaces donde sea necesario.
-
-3. **Documentación de Endpoints**: Asegúrate de incluir la documentación de los endpoints en la sección correspondiente, ya sea usando Postman o ApiDog.
-
-4. **Instrucciones de instalación**: Asegúrate de que las instrucciones de instalación y uso sean claras para facilitar la implementación.
-
-Este README debería proporcionar una buena base para tu proyecto y facilitar la comprensión a otros desarrolladores sobre cómo utilizar y contribuir al mismo.
+<h2>Documentación de Endpoints</h2> 
+<h3>Aquí puedes encontrar la documentación de los endpoints de la API <a href="https://app.apidog.com/invite/project?token=BAOxmzvCO6Ht-0-RyjQGB" target="_blank">ApiDog</a></h3>
