@@ -90,4 +90,17 @@ export class CommentController {
 			data: result.data,
 		};
 	}
+
+	@Get(':id/videoComments')
+	async getVideoComments(@Param('id') id: string) {
+		const result = await this.commentService.getVideoComments(id);
+		if (!result.status) {
+			throw new BadRequestException(result.message);
+		}
+		return {
+			status: result.status,
+			message: result.message,
+			data: result.data,
+		};
+	}
 }

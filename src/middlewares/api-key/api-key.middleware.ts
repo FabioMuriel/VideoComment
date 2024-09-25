@@ -7,13 +7,12 @@ export class ApiKeyMiddleware implements NestMiddleware {
 	private readonly API_KEY = 'b99445ee1e5a422bbab5be2a3369336a';
 
 	use(req: Request, res: Response, next: NextFunction) {
-    const apiKey = req.headers['x-api-key'];
-    
+		const apiKey = req.headers['x-api-key'];
+
 		if (apiKey === this.API_KEY) {
-      next();
+			next();
 		} else {
 			throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    }
-    
+		}
 	}
 }

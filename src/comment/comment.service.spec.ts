@@ -205,4 +205,33 @@ describe('CommentService', () => {
 		expect(result.status).toBe(false);
 		expect(result.message).toBe('Comentario no encontrado');
 	});
+
+	it('should return a list of comments', async () => {
+		const video = { id: '1', title: 'Video Title' };
+
+		const comments = [
+			{ id: '1', content: 'Great video!', video: video },
+			{ id: '2', content: 'Thanks for sharing!', video: video },
+		];
+
+		jest.spyOn(videoService, 'findVideoById').mockResolvedValue(
+			video as Video,
+		);
+
+		jest.spyOn(commentRepository, 'find').mockResolvedValue(
+			comments as Comment[],
+		);
+
+		const result = await service.getVideoComments('1');
+		expect(result.status).toBe(true);
+		expect(result.data).toEqual(comments);
+	});
+
+	it('should return not found message when video does not exist', async () => {
+		jest.spyOn(videoService, 'findVideoById').mockResolvedValue(null);
+
+		const result = await service.getVideoComments('non-existing-id');
+		expect(result.status).toBe(false);
+		expect(result.message).toBe('Video no encontrado');
+	});
 });

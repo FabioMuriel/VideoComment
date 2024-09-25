@@ -152,4 +152,39 @@ export class CommentService {
 			});
 		}
 	}
+
+	async getVideoComments(id: string): Promise<GenericResponse<Comment[]>> {
+		try {
+			const video = await this.videoService.findVideoById(id);
+
+			if (!video) {
+				return GenericResponse.create<Comment[]>({
+					status: false,
+					message: 'Video no encontrado',
+					data: null,
+				});
+			}
+
+			const comments = await this.commentRepository.find({
+				where: { video: { id: id } },
+			});
+
+			const message =
+				comments.length === 0
+					? 'No hay comentarios'
+					: 'Comentarios encontrados';
+
+			return GenericResponse.create<Comment[]>({
+				status: true,
+				message: message,
+				data: comments,
+			});
+		} catch (error) {
+			return GenericResponse.create<Comment[]>({
+				status: false,
+				message: 'Error al obtener los comentarios',
+				errors: [error.message],
+			});
+		}
+	}
 }

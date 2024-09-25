@@ -6,9 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './Entities/User.Entities';
 import { Video } from './Entities/Video.Entities';
 import { Comment } from './Entities/Comment.Entities';
-import { ApiconfigModule } from './apiconfig/apiconfig.module';
 import { ApiKeyMiddleware } from './middlewares/api-key/api-key.middleware';
 import { NestModule, MiddlewareConsumer } from '@nestjs/common';
+
 @Module({
 	imports: [
 		CommentModule,
@@ -21,9 +21,9 @@ import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 			synchronize: false,
 		}),
 		TypeOrmModule.forFeature([User, Video, Comment]),
-		ApiconfigModule,
 	],
 })
+	
 export class AppModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer
