@@ -5,7 +5,7 @@ import { Comment } from '../Entities/Comment.Entities';
 import { Repository } from 'typeorm';
 import { UserService } from '../users/users.service';
 import { VideoService } from '../video/video.service';
-import { GenericResponse } from '../Dtos/GenericResponse.Dto';
+import { GenericResponse } from '../dto/GenericResponse.dto';
 import { Video } from '../entities/Video.Entities';
 import { User } from '../entities/User.Entities';
 

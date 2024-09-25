@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from '../Entities/Comment.Entities';
-import { GenericResponse } from '../Dtos/GenericResponse.Dto';
+import { GenericResponse } from '../dto/GenericResponse.dto';
 import { v4 } from 'uuid';
 import { UserService } from '../users/users.service';
 import { VideoService } from '../video/video.service';

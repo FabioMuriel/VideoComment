@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VideoController } from './video.controller';
 import { VideoService } from './video.service';
 import { BadRequestException } from '@nestjs/common';
-import { GenericResponse } from '../Dtos/GenericResponse.Dto';
+import { GenericResponse } from '../dto/GenericResponse.dto';
 import { Video } from '../Entities/Video.Entities';
 
 describe('VideoController', () => {

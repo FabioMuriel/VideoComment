@@ -9,8 +9,8 @@ import {
 	BadRequestException,
 } from '@nestjs/common';
 import { VideoService } from './video.service';
-import { VideoCreateDto } from '../Dtos/videoCreate.Dto';
-import { VideoUpdateDto } from '../Dtos/videoUpdate.Dto';
+import { VideoCreateDto } from '../dto/videoCreate.dto';
+import { VideoUpdateDto } from '../dto/videoUpdate.dto';
 
 @Controller('video')
 export class VideoController {
