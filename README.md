@@ -29,6 +29,12 @@ Este es un proyecto basado en [Nest](https://github.com/nestjs/nest) que permite
 
 ## Si no tienes instalado Node.js, NestJS y TypeScript, puedes seguir los pasos de la siguiente [documentación](Environment-Settings.MD)
 
+## Clonacion del proyecto
+
+```bash
+$ git clone git@github.com:FabioMuriel/VideoComment.git
+```
+
 ## Configuración del Proyecto
 
 ```bash
