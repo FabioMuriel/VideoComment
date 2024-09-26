@@ -27,7 +27,7 @@ Este es un proyecto basado en [Nest](https://github.com/nestjs/nest) que permite
 -   **Jest**: v29.5.2
 -   **TypeORM**: v10.0.2
 
-## Si no tienes instalado Node.js, NestJS y TypeScript, puedes seguir los pasos de la siguiente [documentación](./Environment%20Settings.md)
+## Si no tienes instalado Node.js, NestJS y TypeScript, puedes seguir los pasos de la siguiente [documentación](Environment-Settings.MD)
 
 ## Configuración del Proyecto
 
